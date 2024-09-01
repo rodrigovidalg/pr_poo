@@ -16,7 +16,7 @@ public class Cliente extends Persona{
     private int id;
     Conexion cn;
     public Cliente(){};
-    public Cliente(String nit, String nombres, String apellidos, String direccion, String telefono, String fecha_nacimiento) {
+    public Cliente(int id, String nit, String nombres, String apellidos, String direccion, String telefono, String fecha_nacimiento) {
         super(nombres, apellidos, direccion, telefono, fecha_nacimiento);
         this.id = id;
         this.nit = nit;
@@ -92,6 +92,43 @@ public class Cliente extends Persona{
             System.out.println("Algo salio mal" + ex.getMessage());
         }
     }
- 
+    
+    public void actualizar(){
+        try{
+           PreparedStatement parametro;
+           cn = new Conexion();
+           cn.abrir_conexion();
+           String query = "UPDATE clientes SET nit = ?, nombres = ?, apellidos = ?, direccion = ?, telefono = ?, fecha_nacimiento = ? WHERE id_cliente = ?;";
+           parametro = (PreparedStatement) cn.conexionDB.prepareStatement(query);
+           parametro.setString(1, getNit());
+           parametro.setString(2, getNombres());
+           parametro.setString(3, getApellidos());
+           parametro.setString(4, getDireccion());
+           parametro.setString(5, getTelefono());
+           parametro.setString(6, getFecha_nacimiento());
+           parametro.setInt(7, this.getId());
+           int executer = parametro.executeUpdate();
+           System.out.println("Modificacion exitosa");
+           cn.cerrar_conexion();
+        }catch(SQLException ex){
+            System.out.println("Error al actualizar" + ex.getMessage());
+        }
+    }
+    public void eliminar(){
+        try{
+           PreparedStatement parametro;
+           cn = new Conexion();
+           cn.abrir_conexion();
+           String query = "Delete from clientes WHERE id_cliente = ?;";
+           parametro = (PreparedStatement) cn.conexionDB.prepareStatement(query);
+           parametro.setInt(1, this.getId());
+           int executer = parametro.executeUpdate();
+           System.out.println("Eliminacion exitosa");
+           cn.cerrar_conexion();
+        }catch(SQLException ex){
+            System.out.println("Error al eliminar" + ex.getMessage());
+        }
+    }
+    
     
 }

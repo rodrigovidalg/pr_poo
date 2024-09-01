@@ -18,7 +18,7 @@ Cliente cliente;
         initComponents();
         // Crea un Nuevo modelo de tabla y crea las columnas
         cliente = new Cliente();
-        tbl_datos.setModel(cliente.leer());
+        tbl_clientes.setModel(cliente.leer());
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -47,7 +47,8 @@ Cliente cliente;
         bt_modificar = new javax.swing.JButton();
         bt_eliminar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tbl_datos = new javax.swing.JTable();
+        tbl_clientes = new javax.swing.JTable();
+        lbl_id = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -98,21 +99,21 @@ Cliente cliente;
             }
         });
 
-        bt_modificar.setText("Modificar");
+        bt_modificar.setText("Actualizar");
         bt_modificar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bt_modificarActionPerformed(evt);
             }
         });
 
-        bt_eliminar.setText("Eliminar");
+        bt_eliminar.setText("Borrar");
         bt_eliminar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bt_eliminarActionPerformed(evt);
             }
         });
 
-        tbl_datos.setModel(new javax.swing.table.DefaultTableModel(
+        tbl_clientes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -123,7 +124,19 @@ Cliente cliente;
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(tbl_datos);
+        tbl_clientes.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbl_clientesMouseClicked(evt);
+            }
+        });
+        tbl_clientes.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tbl_clientesKeyReleased(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tbl_clientes);
+
+        lbl_id.setText("0");
 
         javax.swing.GroupLayout lbl_nitLayout = new javax.swing.GroupLayout(lbl_nit);
         lbl_nit.setLayout(lbl_nitLayout);
@@ -139,14 +152,6 @@ Cliente cliente;
                                 .addGroup(lbl_nitLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addGroup(lbl_nitLayout.createSequentialGroup()
                                         .addGroup(lbl_nitLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(lbl_nombres, javax.swing.GroupLayout.Alignment.LEADING))
-                                        .addGap(89, 89, 89)
-                                        .addGroup(lbl_nitLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(txt_nombres, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(txt_nit, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                    .addGroup(lbl_nitLayout.createSequentialGroup()
-                                        .addGroup(lbl_nitLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                             .addComponent(jLabel6)
                                             .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING)
@@ -156,7 +161,17 @@ Cliente cliente;
                                             .addComponent(txt_apellidos, javax.swing.GroupLayout.DEFAULT_SIZE, 269, Short.MAX_VALUE)
                                             .addComponent(txt_direccion)
                                             .addComponent(txt_telefono)
-                                            .addComponent(txt_fn))))
+                                            .addComponent(txt_fn)))
+                                    .addGroup(lbl_nitLayout.createSequentialGroup()
+                                        .addGroup(lbl_nitLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(lbl_nombres, javax.swing.GroupLayout.Alignment.LEADING))
+                                        .addGap(89, 89, 89)
+                                        .addGroup(lbl_nitLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(lbl_id)
+                                            .addGroup(lbl_nitLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                .addComponent(txt_nombres, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(txt_nit, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                                 .addGap(147, 147, 147)
                                 .addGroup(lbl_nitLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(bt_modificar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -171,7 +186,9 @@ Cliente cliente;
             lbl_nitLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(lbl_nitLayout.createSequentialGroup()
                 .addGap(21, 21, 21)
-                .addComponent(lbl_titulo)
+                .addGroup(lbl_nitLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lbl_titulo)
+                    .addComponent(lbl_id))
                 .addGap(18, 18, 18)
                 .addGroup(lbl_nitLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
@@ -231,16 +248,18 @@ Cliente cliente;
     private void bt_modificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_modificarActionPerformed
         // TODO add your handling code here:
         //Seleccionar la fila en la tabla
-      
+        cliente = new Cliente(Integer.valueOf(this.lbl_id.getText()),txt_nit.getText(),txt_nombres.getText(),txt_apellidos.getText(),txt_direccion.getText(),txt_telefono.getText(),txt_fn.getText());
+        cliente.actualizar();
+        tbl_clientes.setModel(cliente.leer());
     }//GEN-LAST:event_bt_modificarActionPerformed
 
      //Activa la acción en el botón agregar
     private void bt_agregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_agregarActionPerformed
         // TODO add your handling code here:
         //Crea un cliente nuevo con los campos de texto
-        cliente = new Cliente(txt_nit.getText(),txt_nombres.getText(),txt_apellidos.getText(),txt_direccion.getText(),txt_telefono.getText(),txt_fn.getText());
+        cliente = new Cliente(0, txt_nit.getText(),txt_nombres.getText(),txt_apellidos.getText(),txt_direccion.getText(),txt_telefono.getText(),txt_fn.getText());
         cliente.agregar();
-        tbl_datos.setModel(cliente.leer());
+        tbl_clientes.setModel(cliente.leer());
     }//GEN-LAST:event_bt_agregarActionPerformed
 
     private void txt_fnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_fnActionPerformed
@@ -263,8 +282,31 @@ Cliente cliente;
     private void bt_eliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_eliminarActionPerformed
         // TODO add your handling code here:
         //Seleccionar la fila en la tabla
-   
+        cliente = new Cliente();
+        cliente.setId(Integer.valueOf(this.lbl_id.getText()));
+        cliente.eliminar();
+        tbl_clientes.setModel(cliente.leer());
     }//GEN-LAST:event_bt_eliminarActionPerformed
+private void select_datos(){
+    
+        int fila = this.tbl_clientes.getSelectedRow();
+        lbl_id.setText(tbl_clientes.getValueAt(fila, 0).toString());
+        this.txt_nit.setText(tbl_clientes.getValueAt(fila, 1).toString());
+        this.txt_nombres.setText(tbl_clientes.getValueAt(fila, 2).toString());
+        this.txt_apellidos.setText(tbl_clientes.getValueAt(fila, 3).toString());
+        this.txt_direccion.setText(tbl_clientes.getValueAt(fila, 4).toString());
+        this.txt_telefono.setText(tbl_clientes.getValueAt(fila, 5).toString());
+        this.txt_fn.setText(tbl_clientes.getValueAt(fila, 6).toString());
+}
+    private void tbl_clientesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_clientesMouseClicked
+        // TODO add your handling code here:
+        select_datos();
+    }//GEN-LAST:event_tbl_clientesMouseClicked
+
+    private void tbl_clientesKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tbl_clientesKeyReleased
+        // TODO add your handling code here:
+        select_datos();
+    }//GEN-LAST:event_tbl_clientesKeyReleased
 
     /**
      * @param args the command line arguments
@@ -311,10 +353,11 @@ Cliente cliente;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lbl_id;
     private javax.swing.JPanel lbl_nit;
     private javax.swing.JLabel lbl_nombres;
     private javax.swing.JLabel lbl_titulo;
-    private javax.swing.JTable tbl_datos;
+    private javax.swing.JTable tbl_clientes;
     private javax.swing.JTextField txt_apellidos;
     private javax.swing.JTextField txt_direccion;
     private javax.swing.JTextField txt_fn;

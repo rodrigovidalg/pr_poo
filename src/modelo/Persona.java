@@ -61,5 +61,4 @@ abstract class Persona {
     }
     
     protected void agregar(){};
-    
 }
